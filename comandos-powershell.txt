@@ -1,0 +1,79 @@
+*//--Verificamos Version PowerShell --//*
+$PSVersionTable
+
+*//--Buscar Actualziaciones de PowerShell --//*
+ winget search powershell
+
+*//--Buscar PowerShell Version 7.X --//*
+ winget install Microsoft.Powershell
+
+*//--Verificamos Version PowerShell --//*
+Get-Host | Select-Object Version
+
+*//--Obtener Trabajos de impresión pendientes--//*
+Get-Printer | Get-PrintJob
+
+*//--Obtener Versión de Windows y Compilación--//*
+Get-ComputerInfo | select WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer
+
+*//--Obtener Microsoft Windows Key Activation Installed --//*
+Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform' -Name 'BackupProductKeyDefault' 
+
+*//--Obtener Regedit key de "Work or School Account" en PowerShell--//*
+Get-ChildItem -Path "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\WorkplaceJoin\JoinInfo" 
+
+-----------------------------------------------------------------------------------------
+
+*//--Enlistar  estado de politicas de excepcion en PowerShell--//*
+
+Get-ExecutionPolicy -List
+
+-----------------------------------------------------------------------------------------
+
+*//--Cambiar estado de politicas de excepcion en PowerShell--//*
+
+Set-ExecutionPolicy -Scope CurrentUser Bypass -Force ; Set-ExecutionPolicy -Scope LocalMachine Bypass -Force; Set-ExecutionPolicy -Scope Process Bypass -Force
+
+Set-ExecutionPolicy -Scope CurrentUser AllSigned -Force ; Set-ExecutionPolicy -Scope LocalMachine AllSigned -Force; Set-ExecutionPolicy -Scope Process AllSigned -Force
+
+Set-ExecutionPolicy -Scope CurrentUser Restricted -Force; Set-ExecutionPolicy -Scope LocalMachine Restricted -Force; Set-ExecutionPolicy -Scope Process Restricted -Force;
+
+-----------------------------------------------------------------------------------------
+
+*//--Exportar servicios de Windows a archivo CSV--//*
+Get-Service | Select-Object -Property Name, StartType, Status | Export-Csv -Path 'C:\BackupEventsLogs\Services.csv'
+
+-----------------------------------------------------------------------------------------
+
+*//--Cabiar estado de servicios en PowerShell--//*
+
+Get-Service wuauserv | Select-Object -Property Name, StartType, Status
+
+Set-Service -Name wuauserv -StartupType Manual -Status Running
+
+Set-Service -Name wuauserv -StartupType Disabled -Status Running
+
+Set-Service -Name wuauserv -StartupType Disabled -Status Stopped
+
+-----------------------------------------------------------------------------------------
+
+*//--Instalar modulos y paquetes en PowerShell--//*
+
+Install-Module -Name PackageManagement -RequiredVersion 1.1.0.0
+
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Force
+
+Install-Module -Name PSWindowsUpdate -RequiredVersion 2.2.0.2
+
+Import-Module PSWindowsUpdate
+
+-----------------------------------------------------------------------------------------
+
+*//--Obtener insformación de paquetes en PowerShell--//*
+
+Get-Package -Name PSWindowsUpdate
+
+Get-command -module PSWindowsUpdate
+
+-----------------------------------------------------------------------------------------
+
